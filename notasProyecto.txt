@@ -1,0 +1,109 @@
+Interface:
+	Obtener informacion .net:	J:\Angular\neilcummings>dotnet --info
+	Requerido para el proyecto: .NetCore 8.
+	
+	Tipos de proyecto (segun templates) disponibles en el sistema:
+	J:\Angular\neilcummings>dotnet new list
+	
+	
+	
+	Creacion de la solucion: 
+		J:\Angular\neilcummings\datingApp>dotnet new sln
+	Creacion de la webApi:
+		J:\Angular\neilcummings\datingApp>dotnet new webapi -controllers -n api
+		The template "ASP.NET Core Web API" was created successfully.
+	Agregar la webApi a la solucion
+		J:\Angular\neilcummings\datingApp>dotnet sln add api
+		Project `api\api.csproj` added to the solution.
+		J:\Angular\neilcummings\datingApp>dotnet sln list
+		Project(s)
+		----------
+		api\api.csproj
+		
+	Abrir proyecto:
+		J:\Angular\neilcummings\datingApp>code .
+		
+		
+	Pluggins:
+		Instalar c#, .Net Install Tool, Nugget Gallery, c# dev Kit, SQLite
+		
+
+	Ejecutar proyecto desde la terminal de VBCode:
+		PS J:\Angular\neilcummings\datingApp\api> dotnet run
+		Testear api: 	http://localhost:5168/WeatherForecast
+						http://localhost:5168/swagger/
+	
+
+
+Entity Framework
+----------------
+    Una vez instalado el nugget gallery, en la terminal se crea un nuevo panel: NUGET
+    instalar: 
+		Microsoft.EntityFrameworkCore.sqlite 8.04
+		Microsoft.EntityFrameworkCore.Design 8.04
+		se puede instalar con ctrl+p y nuget: open nuget gallery (no funciono esta opcion)
+
+
+	Agregar DBContext: api\Data\DataContext.cs
+	Al manejar un contexto de datos, se debe configurar el archivo Program.cs para la inyeccion de dependencia
+	configurar cadena de conexion en appsettings.Development.json
+
+	Herramienta Nuget
+		para instalar las herramientas de Entity Framework Core .NET Command-line Tools 8.0.4
+		Ir a https://www.nuget.org y buscar el paquete dotnet-ef
+		buscar la version correspondiente al netFramework y demas e instalar: 
+		PS J:\Angular\neilcummings\datingApp\api> dotnet tool install --global dotnet-ef --version 8.0.4
+
+		ejecutar la migracion:
+		PS J:\Angular\neilcummings\datingApp\api> dotnet ef migrations add InitialCreate -o Data/Migrations
+		Build started...
+		Build succeeded.
+		Done. To undo this action, use 'ef migrations remove'
+		PS J:\Angular\neilcummings\datingApp\api> 
+
+		Esto generara archivos de migraciones en el folder: api\Data\Migrations
+		estos archivos contienen toda la logica para la creacion de la base de datos
+		info de la base: PS J:\Angular\neilcummings\datingApp\api> dotnet ef database -h
+
+		Actualizar la db:
+		conforme a lo creado en el comando anterior, se procede a actualizar(construir la db)
+		PS J:\Angular\neilcummings\datingApp\api> dotnet ef database update
+		se creara el archivo: api\dating.db
+
+		sqlite Extension:
+		ctrl+p
+		> sqlite: open database
+		elegir la db creada, y se abrira en el menu de la izquierda el sqlite EXplorer
+		insertar datos por sql query
+
+
+Controller
+----------
+	agregar: api\Controllers\UsersController.cs
+	Marcar la inyeccion de dependencia
+	generar metodos de consulta
+
+ejecucion:
+	se puede hacer una ejecucion para ir realizando modificaciones y se registren sin dar de baja la aplicacion
+	PS J:\Angular\neilcummings\datingApp\api> dotnet watch
+
+
+GitHub
+------	
+	Crear repositorio: https://github.com/angelnemo/DattingApp
+	PS J:\Angular\neilcummings\datingApp\api> git status
+	fatal: not a git repository (or any of the parent directories): .git
+	PS J:\Angular\neilcummings\datingApp\api> git init
+	Initialized empty Git repository in J:/Angular/neilcummings/datingApp/api/.git/
+	PS J:\Angular\neilcummings\datingApp\api> dotnet new gitignore
+	The template "dotnet gitignore file" was created successfully.
+	click derecho sobre appsettings.json y add to gitignore (si es que funca, sino para ver otra opcion luego)
+
+	
+	PS J:\Angular\neilcummings\datingApp\api> git remote add origin https://github.com/angelnemo/DattingApp.git
+	en el panel izquierdo ir a la seccion de git, y junto al boton darle al + "stage all changes"
+	en el mensaje colocar cualquier vaina y commit y publish 
+
+
+
+
