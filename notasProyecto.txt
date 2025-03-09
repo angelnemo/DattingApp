@@ -88,6 +88,13 @@ ejecucion:
 	PS J:\Angular\neilcummings\datingApp\api> dotnet watch
 
 
+
+habilitacion de CORS
+--------------------
+	Realizarlo en Program.cs
+	Observacion en este proyecto es diferente de lo habitual, al parecer existe un error en algunos angular Development environments
+
+
 GitHub
 ------	
 	Crear repositorio: https://github.com/angelnemo/DattingApp
@@ -102,7 +109,114 @@ GitHub
 	
 	PS J:\Angular\neilcummings\datingApp\api> git remote add origin https://github.com/angelnemo/DattingApp.git
 	en el panel izquierdo ir a la seccion de git, y junto al boton darle al + "stage all changes"
-	en el mensaje colocar cualquier vaina y commit y publish 
+	en el mensaje colocar cualquier vaina y commit y publish branch
+	de esta manera quedara publicado el repositorio 
+
+
+
+
+
+**************************  ANGULAR **************************
+
+Verificar la compatibilidad entre el nodejs isntalado y la version de angualr: https://angular.dev/reference/versions
+C:\Users\mccel>node --version
+v20.14.0
+
+
+C:\Users\mccel>ng version
+     _                      _                 ____ _     ___
+    / \   _ __   __ _ _   _| | __ _ _ __     / ___| |   |_ _|
+   / △ \ | '_ \ / _` | | | | |/ _` | '__|   | |   | |    | |
+  / ___ \| | | | (_| | |_| | | (_| | |      | |___| |___ | |
+ /_/   \_\_| |_|\__, |\__,_|_|\__,_|_|       \____|_____|___|
+Angular CLI: 18.2.2
+Node: 20.14.0
+Package Manager: npm 10.7.0
+OS: win32 x64
+
+
+
+crear app:
+	PS J:\Angular\neilcummings\datingApp> ng new client
+	? Which stylesheet format would you like to use? CSS             [ https://developer.mozilla.org/docs/Web/CSS                     ]
+	? Do you want to enable Server-Side Rendering (SSR) and Static Site Generation (SSG/Prerendering)? no
+
+Ejecutar: PS J:\Angular\neilcummings\datingApp\client> ng serve
+
+Preferencias en el editor:
+	Settings / buscar brackets / Auto Closing Brackets: always
+
+
+
+HTTP REQUESTS
+-------------
+	Para esto se requiere tener configurado este tipo de servicio en: client\src\app\app.config.ts
+	agregar: provideHttpClient() en los providers
+	esto debe ser inyectado en el constructor de la componente: client\src\app\app.component.ts
+	o tambien se puede utilizar inject (esto al parecer es para las nuevas versiones)
+
+
+	estructura basica en un httpRequest en app.component.ts:
+	this.http.get('https://localhost:5168/api/users').subscribe({
+      next: () => {},
+      error: () => {},
+      complete: () =>{}
+    })
+
+
+	cuando ya se recuperen los datos, se los podra ir pintando en la componente.html
+	en la seccion @component a los imports agregarle NgFor, para poder iterar los datos
+
+
+
+
+Bootstrap
+---------
+	si no se especifica bien la version de bootstrap, esta dando problemas para angular 18
+	PS J:\Angular\neilcummings\datingApp\client> npm install bootstrap@5.3.3
+	configurar client\angular.json
+	agregando las secciones de codigo:
+   "styles": [
+              "src/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+            ],
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ]
+          },
+
+
+
+
+
+MkCert
+------
+	Utilidad para generar los certificados ssl que pueden ser utilizados de manera local
+	descargarla y en el directorio ejecutar el comando:
+	D:\Angel\Downloads\03>mkcert.exe localhost
+	esto generara 2 archivos: The certificate is at "./localhost.pem" and the key at "./localhost-key.pem" ✅
+	segun el manual con D:\Angel\Downloads\03>mkcert.exe -install   
+	deberian instalarse en el sistema
+	The local CA is now installed in the system trust store! ⚡️
+
+
+	Pero no se instalaron, por lo tanto se lo hace manualmente:
+	se renombra de localhost a central.pem en ambos casos
+	D:\Angel\Downloads\03>certutil -addstore -f "Root" D:\Angel\Downloads\03\central.pem
+	Root "Trusted Root Certification Authorities"
+	Certificate "CENTRAL\mccel@CENTRAL (Angel Giovanny Macancela Robles)" added to store.
+	CertUtil: -addstore command completed successfully.
+
+	Se puede ver al ejecutar mmc.exe que ya estan instalados en el repositorio de certificados de confianza
+	ademas, se debe configurar para que la aplicacion (UNICAMENTE EN ENTORNO DE DESARROLLO) resuelva el sitio con el certificado
+	en el archivo: client\angular.json agregar 
+	"options": {
+            "ssl":true,
+            "sslCert": "./ssl/central.pem",
+            "sslKey": "./ssl/central-key.pem"
+          },
+	dentro de la seccion de serve
+	reinciar la app y ya resuelve segun el certificado
 
 
 
